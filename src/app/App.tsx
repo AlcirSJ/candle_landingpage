@@ -40,6 +40,8 @@ interface Product {
   image: string;
   description: string;
   gradient: string;
+  weight: string;
+  suggestedPlaces: string[];
 }
 
 interface CartItem extends Product {
@@ -55,6 +57,8 @@ export default function App() {
         "https://images.unsplash.com/photo-1707839568431-c2648f6d5184?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       description: "Baunilha quente com toques de âmbar",
       gradient: "from-amber-100 to-orange-100",
+      weight: "300g",
+      suggestedPlaces: ["Cama", "Sofá", "Cantinho de Leitura"],
     },
     {
       name: "Alegria Cítrica",
@@ -63,6 +67,8 @@ export default function App() {
         "https://images.unsplash.com/photo-1707839568443-912e7206c726?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       description: "Toranja fresca e bergamota",
       gradient: "from-yellow-100 to-pink-100",
+      weight: "250g",
+      suggestedPlaces: ["Cama", "Sofá", "Cantinho de Leitura"],
     },
     {
       name: "Branco Minimalista",
@@ -71,6 +77,8 @@ export default function App() {
         "https://images.unsplash.com/photo-1707839568871-7c18453668ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       description: "Algodão puro e chá branco",
       gradient: "from-slate-100 to-neutral-100",
+      weight: "350g",
+      suggestedPlaces: ["Cama", "Sofá", "Cantinho de Leitura"],
     },
     {
       name: "Coleção Luxo",
@@ -79,6 +87,8 @@ export default function App() {
         "https://images.unsplash.com/photo-1707839568938-f9b50bb88454?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       description: "Blend exclusivo de botânicos raros",
       gradient: "from-purple-100 to-pink-100",
+      weight: "400g",
+      suggestedPlaces: ["Cama", "Sofá", "Cantinho de Leitura"],
     },
   ];
 
@@ -117,6 +127,28 @@ export default function App() {
   const handleAddToCart = (product: Product, index: number) => {
     const quantity = getQuantity(index);
     addToCart(product, quantity);
+
+    // Display a simple pop-up message
+    const popup = document.createElement('div');
+    popup.textContent = `${product.name} foi adicionado ao carrinho!`;
+    popup.style.position = 'fixed';
+    popup.style.bottom = '20px';
+    popup.style.right = '20px';
+    popup.style.backgroundColor = '#333';
+    popup.style.color = '#fff';
+    popup.style.padding = '10px 20px';
+    popup.style.borderRadius = '5px';
+    popup.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
+    popup.style.zIndex = '1000';
+    popup.style.opacity = '1';
+    popup.style.transition = 'opacity 0.5s ease';
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+      popup.style.opacity = '0';
+      setTimeout(() => document.body.removeChild(popup), 500);
+    }, 2000);
   };
 
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -180,6 +212,16 @@ export default function App() {
     },
   ];
 
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const openProductModal = (product: Product) => {
+    setSelectedProduct(product);
+  };
+
+  const closeProductModal = () => {
+    setSelectedProduct(null);
+  };
+
   return (
     <div className="size-full overflow-y-auto bg-gradient-to-br from-stone-50 via-white to-amber-50">
       {/* Floating Nav */}
@@ -190,15 +232,14 @@ export default function App() {
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="flex items-center gap-8">
-          <span
-            className="text-lg tracking-tight cursor-pointer"
+          <button
+            className="text-lg tracking-tight cursor-pointer bg-transparent border-none p-0"
             onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
+               e.preventDefault(); document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
             }}
           >
             Shantii
-          </span>
+          </button>
           <div className="flex gap-6 text-sm text-neutral-600">
             <button className="hover:text-neutral-900 transition-colors" onClick={(e) => { e.preventDefault(); document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' }); }}>
               Loja
@@ -214,7 +255,7 @@ export default function App() {
       </motion.nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 pt-24 pb-32 overflow-hidden">
+      <section id="hero" className="relative min-h-screen flex items-center justify-center px-4 pt-24 pb-32 overflow-hidden">
         {/* Gradient Orbs */}
         <motion.div
           className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-amber-300/30 to-orange-300/30 rounded-full blur-3xl"
@@ -399,7 +440,10 @@ export default function App() {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                   </div>
-                  <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-5 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div
+                    className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-5 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                    onClick={() => openProductModal(product)}
+                  >
                     <span className="text-sm">Ver Detalhes</span>
                   </div>
                 </div>
@@ -442,6 +486,32 @@ export default function App() {
         </div>
       </section>
 
+      {/* Product Modal */}
+      {selectedProduct && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative">
+            <button
+              className="absolute top-4 right-4 text-neutral-600 hover:text-neutral-900"
+              onClick={closeProductModal}
+            >
+              Fechar
+            </button>
+            <h2 className="text-2xl font-bold mb-4 text-neutral-900">
+              {selectedProduct.name}
+            </h2>
+            <p className="text-neutral-600 mb-4">
+              {selectedProduct.description}
+            </p>
+            <p className="text-neutral-600 mb-4">
+              Peso: {selectedProduct.weight}
+            </p>
+            <p className="text-neutral-600 mb-4">
+              Locais indicados: {selectedProduct.suggestedPlaces}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* About Us Section */}
       <section id="aboutUs" className="py-32 px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 via-neutral-800 to-amber-900"></div>
@@ -472,9 +542,13 @@ export default function App() {
         <div className="mb-6">
           <span className="text-2xl text-white tracking-tight">Shantii</span>
         </div>
-        <p className="text-sm">
+        <p className="text-sm mb-4">
           &copy; 2026 Shantii Candles. Feitas com carinho.
         </p>
+        <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+          <p className="text-sm">Contato: contato@sitevela.com</p>
+          <p className="text-sm">Telefone: (11) 99999-9999</p>
+        </div>
       </footer>
 
       {/* Cart Drawer */}

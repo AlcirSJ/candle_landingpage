@@ -34,6 +34,26 @@ const ArrowRightIcon = ArrowRight as unknown as ComponentType<{
   className?: string;
 }>;
 
+const MinusIcon = Minus as unknown as ComponentType<{
+  size?: number;
+  className?: string;
+}>;
+
+const PlusIcon = Plus as unknown as ComponentType<{
+  size?: number;
+  className?: string;
+}>;
+
+const Trash2Icon = Trash2 as unknown as ComponentType<{
+  size?: number;
+  className?: string;
+}>;
+
+const ShoppingCartIcon = ShoppingCart as unknown as ComponentType<{
+  size?: number;
+  className?: string;
+}>;
+
 interface Product {
   name: string;
   price: string;
@@ -460,7 +480,7 @@ export default function App() {
                     onClick={() => decreaseQuantity(index)}
                     className="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 transition-colors flex items-center justify-center"
                   >
-                    <Minus size={16} />
+                    <MinusIcon size={16} />
                   </button>
                   <span className="text-lg min-w-[2rem] text-center">
                     {getQuantity(index)}
@@ -469,7 +489,7 @@ export default function App() {
                     onClick={() => increaseQuantity(index)}
                     className="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 transition-colors flex items-center justify-center"
                   >
-                    <Plus size={16} />
+                    <PlusIcon size={16} />
                   </button>
                 </div>
 
@@ -569,14 +589,14 @@ export default function App() {
                         onClick={() => updateCartQuantity(item.name, item.quantity - 1)}
                         className="w-8 h-8 rounded-full bg-neutral-700 hover:bg-neutral-600 transition-colors flex items-center justify-center"
                       >
-                        <Minus size={16} className="text-neutral-50" />
+                        <MinusIcon size={16} className="text-neutral-50" />
                       </button>
                       <span className="text-neutral-50">{item.quantity}</span>
                       <button
                         onClick={() => updateCartQuantity(item.name, item.quantity + 1)}
                         className="w-8 h-8 rounded-full bg-neutral-700 hover:bg-neutral-600 transition-colors flex items-center justify-center"
                       >
-                        <Plus size={16} className="text-neutral-50" />
+                        <PlusIcon size={16} className="text-neutral-50" />
                       </button>
                     </div>
                   </div>
@@ -586,7 +606,7 @@ export default function App() {
                       onClick={() => setCart((prevCart) => prevCart.filter((_, i) => i !== index))}
                       className="text-red-500 hover:text-red-700 transition-colors flex items-center justify-center"
                     >
-                      <Trash2 size={16} />
+                      <Trash2Icon size={16} />
                     </button>
                   </div>
                 </li>
@@ -618,7 +638,7 @@ export default function App() {
         className="fixed bottom-4 right-4 bg-neutral-900 text-white px-4 py-2 rounded-full hover:bg-neutral-800 transition-colors z-40 flex items-center justify-center gap-2"
         onClick={() => setIsCartOpen(true)}
       >
-        <ShoppingCart size={20} />
+        <ShoppingCartIcon size={20} />
         Ver Carrinho
       </button>
     </div>

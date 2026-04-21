@@ -7,11 +7,14 @@ import {
   Minus,
   Plus,
   ShoppingCart,
+  MessageCircle,
   Trash2,
 } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import { motion } from "motion/react";
 import { useState, type ComponentType } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import AdminPanel from "./components/AdminPanel"; // Ensure the path matches the file structure
 
 const FlameIcon = Flame as unknown as ComponentType<{
   size?: number;
@@ -54,6 +57,11 @@ const ShoppingCartIcon = ShoppingCart as unknown as ComponentType<{
   className?: string;
 }>;
 
+const WhatsAppIcon = MessageCircle as unknown as ComponentType<{
+  size?: number;
+  className?: string;
+}>;
+
 interface Product {
   name: string;
   price: string;
@@ -68,7 +76,7 @@ interface CartItem extends Product {
   quantity: number;
 }
 
-export default function App() {
+export function App() {
   const products = [
     {
       name: "Sonhos de Baunilha",
@@ -149,24 +157,24 @@ export default function App() {
     addToCart(product, quantity);
 
     // Display a simple pop-up message
-    const popup = document.createElement('div');
+    const popup = document.createElement("div");
     popup.textContent = `${product.name} foi adicionado ao carrinho!`;
-    popup.style.position = 'fixed';
-    popup.style.bottom = '20px';
-    popup.style.right = '20px';
-    popup.style.backgroundColor = '#333';
-    popup.style.color = '#fff';
-    popup.style.padding = '10px 20px';
-    popup.style.borderRadius = '5px';
-    popup.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
-    popup.style.zIndex = '1000';
-    popup.style.opacity = '1';
-    popup.style.transition = 'opacity 0.5s ease';
+    popup.style.position = "fixed";
+    popup.style.bottom = "20px";
+    popup.style.right = "20px";
+    popup.style.backgroundColor = "#333";
+    popup.style.color = "#fff";
+    popup.style.padding = "10px 20px";
+    popup.style.borderRadius = "5px";
+    popup.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)";
+    popup.style.zIndex = "1000";
+    popup.style.opacity = "1";
+    popup.style.transition = "opacity 0.5s ease";
 
     document.body.appendChild(popup);
 
     setTimeout(() => {
-      popup.style.opacity = '0';
+      popup.style.opacity = "0";
       setTimeout(() => document.body.removeChild(popup), 500);
     }, 2000);
   };
@@ -185,16 +193,16 @@ export default function App() {
       prevCart.map((item) =>
         item.name === productName
           ? { ...item, quantity: Math.max(newQuantity, 1) }
-          : item
-      )
+          : item,
+      ),
     );
   };
 
   const finalizePurchase = () => {
-    const phoneNumber = "5519996497459"; // Substitua pelo número desejado
-    const productList = cart.map(
-      (item) => `${item.name} (Quantidade: ${item.quantity})`
-    ).join("\n"); // Quebra de linha para WhatsApp
+    const phoneNumber = "5519999999999"; // Substitua pelo número desejado
+    const productList = cart
+      .map((item) => `${item.name} (Quantidade: ${item.quantity})`)
+      .join("\n"); // Quebra de linha para WhatsApp
     const total = calculateTotal();
     const message = `Olá, gostaria de finalizar minha compra com os seguintes itens:\n${productList}\n\nTotal: R$ ${total}`;
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
@@ -202,11 +210,14 @@ export default function App() {
   };
 
   const calculateTotal = () => {
-    return cart.reduce(
-      (total, item) =>
-        total + parseFloat(item.price.replace("R$", "").trim()) * item.quantity,
-      0,
-    ).toFixed(2);
+    return cart
+      .reduce(
+        (total, item) =>
+          total +
+          parseFloat(item.price.replace("R$", "").trim()) * item.quantity,
+        0,
+      )
+      .toFixed(2);
   };
 
   const features = [
@@ -255,19 +266,46 @@ export default function App() {
           <button
             className="text-lg tracking-tight cursor-pointer bg-transparent border-none p-0"
             onClick={(e) => {
-               e.preventDefault(); document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
+              e.preventDefault();
+              document
+                .getElementById("hero")
+                ?.scrollIntoView({ behavior: "smooth" });
             }}
           >
             Shantii
           </button>
           <div className="flex gap-6 text-sm text-neutral-600">
-            <button className="hover:text-neutral-900 transition-colors" onClick={(e) => { e.preventDefault(); document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' }); }}>
+            <button
+              className="hover:text-neutral-900 transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("products")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               Loja
             </button>
-            <button  className="hover:text-neutral-900 transition-colors" onClick={(e) => { e.preventDefault(); document.getElementById('aboutUs')?.scrollIntoView({ behavior: 'smooth' }); }}>
+            <button
+              className="hover:text-neutral-900 transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("aboutUs")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               Sobre
             </button>
-            <button className="hover:text-neutral-900 transition-colors" onClick={(e) => { e.preventDefault(); document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }); }}>
+            <button
+              className="hover:text-neutral-900 transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("footer")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               Contato
             </button>
           </div>
@@ -275,7 +313,10 @@ export default function App() {
       </motion.nav>
 
       {/* Hero Section */}
-      <section id="hero" className="relative min-h-screen flex items-center justify-center px-4 pt-24 pb-32 overflow-hidden">
+      <section
+        id="hero"
+        className="relative min-h-screen flex items-center justify-center px-4 pt-24 pb-32 overflow-hidden"
+      >
         {/* Gradient Orbs */}
         <motion.div
           className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-amber-300/30 to-orange-300/30 rounded-full blur-3xl"
@@ -546,9 +587,10 @@ export default function App() {
             Sobre Nós
           </h2>
           <p className="text-xl text-neutral-300 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Na Shantii, acreditamos que cada vela conta uma história. Nossas velas
-            são feitas à mão com materiais sustentáveis e um toque de amor, para
-            transformar qualquer espaço em um refúgio de paz e tranquilidade.
+            Na Shantii, acreditamos que cada vela conta uma história. Nossas
+            velas são feitas à mão com materiais sustentáveis e um toque de
+            amor, para transformar qualquer espaço em um refúgio de paz e
+            tranquilidade.
           </p>
           <p className="text-xl text-neutral-300 mb-12 max-w-2xl mx-auto leading-relaxed">
             Junte-se a nós nesta jornada de criar ambientes acolhedores e cheios
@@ -558,7 +600,10 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer id="footer" className="py-16 px-4 bg-neutral-950 text-neutral-400 text-center">
+      <footer
+        id="footer"
+        className="py-16 px-4 bg-neutral-950 text-neutral-400 text-center"
+      >
         <div className="mb-6">
           <span className="text-2xl text-white tracking-tight">Shantii</span>
         </div>
@@ -567,33 +612,53 @@ export default function App() {
         </p>
         <div className="flex flex-col md:flex-row justify-center items-center gap-4">
           <p className="text-sm">Contato: contato@sitevela.com</p>
-          <p className="text-sm">Telefone: (11) 99999-9999</p>
+          <p className="text-sm flex items-center gap-2">
+            Telefone:
+            <a
+              href="https://wa.me/5511999999999"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-500 hover:text-green-600 flex items-center gap-1"
+            >
+              <WhatsAppIcon size={16} />
+              (11) 99999-9999
+            </a>
+          </p>
         </div>
       </footer>
 
       {/* Cart Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full bg-neutral-900 text-neutral-100 shadow-lg p-6 w-96 transform transition-transform duration-300 z-50 ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-full bg-neutral-900 text-neutral-100 shadow-lg p-6 w-96 transform transition-transform duration-300 z-50 ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         <h2 className="text-xl font-bold mb-4 text-neutral-50">Carrinho</h2>
         {cart.length > 0 ? (
           <div>
             <ul className="mb-4">
               {cart.map((item, index) => (
-                <li key={index} className="flex items-center justify-between mb-2">
+                <li
+                  key={index}
+                  className="flex items-center justify-between mb-2"
+                >
                   <div>
                     <p className="font-medium text-neutral-50">{item.name}</p>
-                    <p className="text-sm text-neutral-400">Preço Unitário: {item.price}</p>
+                    <p className="text-sm text-neutral-400">
+                      Preço Unitário: {item.price}
+                    </p>
                     <div className="flex items-center gap-2 mt-2">
                       <button
-                        onClick={() => updateCartQuantity(item.name, item.quantity - 1)}
+                        onClick={() =>
+                          updateCartQuantity(item.name, item.quantity - 1)
+                        }
                         className="w-8 h-8 rounded-full bg-neutral-700 hover:bg-neutral-600 transition-colors flex items-center justify-center"
                       >
                         <MinusIcon size={16} className="text-neutral-50" />
                       </button>
                       <span className="text-neutral-50">{item.quantity}</span>
                       <button
-                        onClick={() => updateCartQuantity(item.name, item.quantity + 1)}
+                        onClick={() =>
+                          updateCartQuantity(item.name, item.quantity + 1)
+                        }
                         className="w-8 h-8 rounded-full bg-neutral-700 hover:bg-neutral-600 transition-colors flex items-center justify-center"
                       >
                         <PlusIcon size={16} className="text-neutral-50" />
@@ -601,9 +666,19 @@ export default function App() {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <p className="font-medium text-neutral-50">Subtotal: R$ {(parseFloat(item.price.replace('R$', '').trim()) * item.quantity).toFixed(2)}</p>
+                    <p className="font-medium text-neutral-50">
+                      Subtotal: R${" "}
+                      {(
+                        parseFloat(item.price.replace("R$", "").trim()) *
+                        item.quantity
+                      ).toFixed(2)}
+                    </p>
                     <button
-                      onClick={() => setCart((prevCart) => prevCart.filter((_, i) => i !== index))}
+                      onClick={() =>
+                        setCart((prevCart) =>
+                          prevCart.filter((_, i) => i !== index),
+                        )
+                      }
                       className="text-red-500 hover:text-red-700 transition-colors flex items-center justify-center"
                     >
                       <Trash2Icon size={16} />
@@ -613,7 +688,9 @@ export default function App() {
               ))}
             </ul>
             <div className="mt-4 border-t border-neutral-700 pt-4">
-              <p className="text-lg font-bold text-neutral-50">Valor Total: R$ {calculateTotal()}</p>
+              <p className="text-lg font-bold text-neutral-50">
+                Valor Total: R$ {calculateTotal()}
+              </p>
             </div>
             <button
               className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors w-full mb-2"
@@ -644,3 +721,5 @@ export default function App() {
     </div>
   );
 }
+
+export default App;

@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
 
-const ProductForm = ({ onSubmit }) => {
+interface Product {
+  name: string;
+  price: number;
+  description: string;
+}
+
+interface ProductFormProps {
+  onSubmit: (product: Product) => void;
+}
+
+const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [productDescription, setProductDescription] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const price = parseFloat(productPrice);
+    if (isNaN(price) || price <= 0) {
+      alert('Please enter a valid price.');
+      return;
+    }
     onSubmit({
       name: productName,
-      price: productPrice,
+      price,
       description: productDescription,
     });
     setProductName('');
@@ -20,8 +35,9 @@ const ProductForm = ({ onSubmit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Product Name:</label>
+        <label htmlFor="productName">Product Name:</label>
         <input
+          id="productName"
           type="text"
           value={productName}
           onChange={(e) => setProductName(e.target.value)}
@@ -29,8 +45,9 @@ const ProductForm = ({ onSubmit }) => {
         />
       </div>
       <div>
-        <label>Product Price:</label>
+        <label htmlFor="productPrice">Product Price:</label>
         <input
+          id="productPrice"
           type="number"
           value={productPrice}
           onChange={(e) => setProductPrice(e.target.value)}
@@ -38,8 +55,9 @@ const ProductForm = ({ onSubmit }) => {
         />
       </div>
       <div>
-        <label>Product Description:</label>
+        <label htmlFor="productDescription">Product Description:</label>
         <textarea
+          id="productDescription"
           value={productDescription}
           onChange={(e) => setProductDescription(e.target.value)}
           required

@@ -1,11 +1,48 @@
+# Site Vela - Versão 3
 
-  # Create Candle Company Landing Page
+Este repositório contém o código-fonte para o projeto **Site Vela - Versão 3**. O objetivo deste projeto é criar uma landing page moderna e responsiva para a empresa fictícia de velas.
 
-  This is a code bundle for Create Candle Company Landing Page. The original project is available at https://www.figma.com/design/kEcu7bJyi27dUczvjTGAuY/Create-Candle-Company-Landing-Page.
+## Tecnologias Utilizadas
 
-  ## Running the code
+- **Vite**: Ferramenta de construção rápida para projetos web.
+- **React**: Biblioteca para construção de interfaces de usuário.
+- **TypeScript**: Superset do JavaScript que adiciona tipagem estática.
+- **Tailwind CSS**: Framework de CSS utilitário para estilização.
 
-  Run `npm i` to install the dependencies.
+## Estrutura do Projeto
 
-  Run `npm run dev` to start the development server.
-  
+- `src/app/components`: Contém os componentes reutilizáveis da aplicação.
+- `src/app/styles`: Arquivos de estilização, incluindo configurações do Tailwind.
+- `vite.config.ts`: Configuração do Vite.
+
+## Como Executar o Projeto
+
+1. Clone este repositório:
+
+   ```bash
+   git clone https://github.com/usuario/site-vela-v3.git
+   ```
+
+2. Acesse o diretório do projeto:
+
+   ```bash
+   cd site-vela-v3
+   ```
+
+3. Instale as dependências:
+
+   ```bash
+   pnpm install
+   ```
+
+4. Inicie o servidor de desenvolvimento:
+
+   ```bash
+   pnpm run dev
+   ```
+
+5. Abra o navegador e acesse:
+
+   ```
+   http://localhost:5173
+   ```
